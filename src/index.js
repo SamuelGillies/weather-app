@@ -1,4 +1,4 @@
 import './style.css'; 
 // import img from './img/'
 
-console.log('exporting is working correctly'); 
+const k = '6e6c524233e149aa8be130049230604'; 
