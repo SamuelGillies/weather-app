@@ -1,4 +1,5 @@
 import './style.css'; 
+import error from './img/error.svg'; 
 
 let form = document.getElementById('form');
 let search = document.getElementById('form--search');
@@ -61,13 +62,46 @@ function generateDOM(newData) {
     element.append(weatherContainer); 
 }
 
-async function getWeather(place) {
-    const key = '6e6c524233e149aa8be130049230604';
-    let responseData = await fetch(`https://api.weatherapi.com/v1/current.json?key=${key}&q=${place}`, {mode: 'cors'}); 
-    let weatherData = await responseData.json(); 
-    let newData = processData(weatherData);
-    generateDOM(newData); 
+function errorDOM(errorText) {
+    const element = document.getElementById('container'); 
+    element.innerHTML = '';
+
+    let errorContainer = document.createElement('div'); 
+    errorContainer.setAttribute('id', 'errorContainer');
+
+    let errorImage = new Image(); 
+    errorImage.setAttribute('id', 'errorIcon')
+    errorImage.src = error; 
+
+    let errorMsg = document.createElement('p'); 
+    errorMsg.setAttribute('id', 'errorMsg'); 
+    errorMsg.textContent = errorText; 
+    
+    errorContainer.append(errorImage, errorMsg); 
+    element.append(errorContainer); 
 }
+
+async function getWeather(place) {
+    try {
+        const key = '6e6c524233e149aa8be130049230604';
+        let responseData = await fetch(`https://api.weatherapi.com/v1/current.json?key=${key}&q=${place}`, {mode: 'cors'}); 
+        let weatherData = await responseData.json(); 
+        let newData = processData(weatherData);
+        generateDOM(newData); 
+    } catch (error) {
+        if (error instanceof TypeError) {
+            if (place === '') {
+                console.error(`Please enter a valid location`); 
+                errorDOM(`Please enter a valid location`); 
+            } else {
+                console.error(`No location found for ${place}`); 
+                errorDOM(`No location found for ${place}`); 
+            }
+        } else {
+            console.error('API Error:', error);
+          }
+    };
+};
 
 function processData(weatherData) {
     let data = {
