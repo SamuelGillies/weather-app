@@ -3,6 +3,7 @@ import error from './img/error.svg';
 
 let form = document.getElementById('form');
 let search = document.getElementById('form--search');
+let body = document.getElementById('body'); 
 
 function generateDOM(newData) {
     const element = document.getElementById('container'); 
@@ -56,7 +57,6 @@ function generateDOM(newData) {
     uvText.setAttribute('class', 'text');
     uvText.textContent = `UV Rating: ${newData.uv}`;  
 
-
     let uvAdviceContainer = document.createElement('div'); 
     uvAdviceContainer.setAttribute('id', 'uvAdvice--container');
     let uvContent1 = document.createElement('p'); 
@@ -74,7 +74,21 @@ function generateDOM(newData) {
 
     weatherContainer.append(placeContainer, tempContainer, infoContainer, uvAdviceContainer);
     element.append(weatherContainer); 
-}
+
+    if (newData.time === 'morning') {
+        body.style.backgroundImage = "url('https://source.unsplash.com/sYffw0LNr7s')"; 
+        body.style.color = 'white'; 
+    } else if (newData.time === 'afternoon') {
+        body.style.backgroundImage = "url('https://source.unsplash.com/UPnxtRNH8q8')"; 
+        body.style.color = 'black'; 
+    } else if (newData.time === 'evening') {
+        body.style.backgroundImage = "url('https://source.unsplash.com/-N0cgDSF_MI')"; 
+        body.style.color = 'white'; 
+    } else if (newData.time === 'night') {
+        body.style.backgroundImage = "url('https://source.unsplash.com/Q_RBVFFXR_g')"; 
+        body.style.color = 'white'; 
+    };
+};
 
 function errorDOM(errorText) {
     const element = document.getElementById('container'); 
@@ -101,6 +115,7 @@ async function getWeather(place) {
         let responseData = await fetch(`https://api.weatherapi.com/v1/current.json?key=${key}&q=${place}`, {mode: 'cors'}); 
         let weatherData = await responseData.json(); 
         let newData = processData(weatherData);
+        console.log(newData); 
         generateDOM(newData); 
     } catch (error) {
         if (error instanceof TypeError) {
@@ -134,7 +149,8 @@ function processData(weatherData) {
 }
 
 function timeOfDay(time) {
-    let currentHour = time.substr(11, 2); 
+    let currentHour = time.substr(11, 2).replace(':', ''); 
+    console.log(currentHour); 
 
     if ((currentHour >= 5) && (currentHour <= 11)) {
         return 'morning'; 
@@ -142,7 +158,9 @@ function timeOfDay(time) {
         return 'afternoon';
     } else if ((currentHour >= 17) && (currentHour <= 19)) {
         return 'evening';
-    } else if ((currentHour >= 20) && (currentHour <= 5)) {
+    } else if ((currentHour >= 20)) {
+        return 'night';
+    } else if (currentHour <= 4) {
         return 'night';
     }
 }; 
@@ -171,4 +189,3 @@ form.addEventListener('submit', (e) => {
 (function init() {
     getWeather('london'); 
 })(); 
-
