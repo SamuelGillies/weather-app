@@ -56,9 +56,23 @@ function generateDOM(newData) {
     uvText.setAttribute('class', 'text');
     uvText.textContent = `UV Rating: ${newData.uv}`;  
 
+
+    let uvAdviceContainer = document.createElement('div'); 
+    uvAdviceContainer.setAttribute('id', 'uvAdvice--container');
+    let uvContent1 = document.createElement('p'); 
+    uvContent1.setAttribute('id', 'info--uvAdvice1');
+    uvContent1.setAttribute('class', 'text');
+    uvContent1.textContent = uvAdvice(newData.uv)[0];   
+    let uvContent2 = document.createElement('p'); 
+    uvContent2.setAttribute('id', 'info--uvAdvice2');
+    uvContent2.setAttribute('class', 'text');
+    uvContent2.textContent = uvAdvice(newData.uv)[1];  
+
+    uvAdviceContainer.append(uvContent1, uvContent2); 
+
     infoContainer.append(feelslikeText, humidityText, windText, uvText); 
 
-    weatherContainer.append(placeContainer, tempContainer, infoContainer);
+    weatherContainer.append(placeContainer, tempContainer, infoContainer, uvAdviceContainer);
     element.append(weatherContainer); 
 }
 
@@ -90,7 +104,7 @@ async function getWeather(place) {
         generateDOM(newData); 
     } catch (error) {
         if (error instanceof TypeError) {
-            if (place === '') {
+            if (place == '') {
                 console.error(`Please enter a valid location`); 
                 errorDOM(`Please enter a valid location`); 
             } else {
@@ -133,6 +147,20 @@ function timeOfDay(time) {
     }
 }; 
 
+function uvAdvice(uvRating) {
+    if ((uvRating >= 0) && (uvRating <= 2)) {
+        return ['Low danger from the Sun\'s UV rays for the average person.', 'Wear sunglasses on bright days. If you burn easily, cover up and use broad spectrum SPF 15+ sunscreen. Bright surfaces, sand, water, and snow, will increase UV exposure.'];
+    } else if ((uvRating >= 3) && (uvRating <= 5)) {
+        return ['Moderate risk of harm from unprotected sun exposure.', 'Stay in shade near midday when the Sun is strongest. If outdoors, wear sun-protective clothing, a wide-brimmed hat, and UV-blocking sunglasses. Generously apply broad spectrum SPF 15+ sunscreen every 1.5 hours, even on cloudy days, and after swimming or sweating. Bright surfaces, such as sand, water, and snow, will increase UV exposure.'];
+    } else if ((uvRating >= 6) && (uvRating <= 7)) {
+        return ['High risk of harm from unprotected sun exposure.', 'Protection against skin and eye damage is needed. Reduce time in the sun between 10 a.m. and 4 p.m. If outdoors, seek shade and wear sun-protective clothing, a wide-brimmed hat, and UV-blocking sunglasses. Generously apply broad spectrum SPF 15+ sunscreen every 1.5 hours, even on cloudy days, and after swimming or sweating. Bright surfaces, such as sand, water, and snow, will increase UV exposure.'];
+    } else if ((uvRating >= 8) && (uvRating <= 10)) {
+        return ['Very high risk of harm from unprotected sun exposure.', 'Take extra precautions because unprotected skin and eyes will be damaged and can burn quickly. Minimize sun exposure between 10 a.m. and 4 p.m. If outdoors, seek shade and wear sun-protective clothing, a wide-brimmed hat, and UV-blocking sunglasses. Generously apply broad spectrum SPF 15+ sunscreen every 1.5 hours, even on cloudy days, and after swimming or sweating. Bright surfaces, such as sand, water, and snow, will increase UV exposure.'];
+    } else if (uvRating >= 11) {
+        return ['Extreme risk of harm from unprotected sun exposure.', 'Take all precautions because unprotected skin and eyes can burn in minutes. Try to avoid sun exposure between 10 a.m. and 4 p.m. If outdoors, seek shade and wear sun-protective clothing, a wide-brimmed hat, and UV-blocking sunglasses. Generously apply broad spectrum SPF 15+ sunscreen every 1.5 hours, even on cloudy days, and after swimming or sweating. Bright surfaces, such as sand, water, and snow, will increase UV exposure.'];
+    }
+};
+
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     let place = search.value; 
@@ -143,3 +171,4 @@ form.addEventListener('submit', (e) => {
 (function init() {
     getWeather('london'); 
 })(); 
+
