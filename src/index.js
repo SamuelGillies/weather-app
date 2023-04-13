@@ -31,20 +31,22 @@ function generateDOM(newData) {
     let nameText = document.createElement('p'); 
     nameText.setAttribute('id', 'location--nameText');
     nameText.setAttribute('class', 'text');
-    nameText.textContent = `Location: ${newData.name}, ${newData.region}`; 
+    nameText.textContent = `${newData.name}, ${newData.region}`; 
     let descText = document.createElement('p'); 
     descText.setAttribute('id', 'location--descText');
     descText.setAttribute('class', 'text');
     descText.textContent = newData.description; 
+    let image = new Image(); 
+    image.src = newData.icon; 
 
-    locationContainer.append(nameText, descText); 
+    locationContainer.append(nameText, descText, image); 
 
     let tempContainer = document.createElement('div'); 
     tempContainer.setAttribute('id', 'temperature--container');
     let tempText = document.createElement('p'); 
     tempText.setAttribute('id', 'temperature--text');
     tempText.setAttribute('class', 'text');
-    tempText.textContent = newData.temp; 
+    tempText.textContent = `${newData.temp}˚C`; 
 
     tempContainer.append(tempText); 
 
@@ -78,7 +80,9 @@ async function getWeather(location) {
     const key = '6e6c524233e149aa8be130049230604';
     let responseData = await fetch(`https://api.weatherapi.com/v1/current.json?key=${key}&q=${location}`, {mode: 'cors'}); 
     let weatherData = await responseData.json(); 
+    console.log(weatherData); 
     let newData = processData(weatherData);
+    console.log(newData); 
     generateDOM(newData); 
 }
 
@@ -86,6 +90,7 @@ function processData(weatherData) {
     let data = {
         name: weatherData.location.name, 
         region: weatherData.location.region, 
+        time: timeOfDay(weatherData.location.localtime),
         description: weatherData.current.condition.text,
         icon: weatherData.current.condition.icon,  
         temp: weatherData.current.temp_c, 
@@ -97,6 +102,20 @@ function processData(weatherData) {
     return data; 
 }
 
+function timeOfDay(time) {
+    let currentHour = time.substr(11, 2); 
+
+    if ((currentHour >= 5) && (currentHour <= 11)) {
+        return 'morning'; 
+    } else if ((currentHour >= 12) && (currentHour <= 16)) {
+        return 'afternoon';
+    } else if ((currentHour >= 17) && (currentHour <= 19)) {
+        return 'evening';
+    } else if ((currentHour >= 20) && (currentHour <= 5)) {
+        return 'night';
+    }
+}; 
+
 (function init() {
     getWeather('london'); 
 })(); 
@@ -105,5 +124,5 @@ function processData(weatherData) {
 //     e.preventDefault();
 //     const search = document.getElementById('form--search');
 //     location = String(search.value); 
-//     getWeather(); 
+//     getWeather(location); 
 // });
