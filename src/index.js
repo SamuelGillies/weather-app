@@ -50,11 +50,11 @@ function generateDOM(newData) {
     let windText = document.createElement('p'); 
     windText.setAttribute('id', 'info--windText');
     windText.setAttribute('class', 'text');
-    windText.textContent = `Wind Speed: ${newData.humidity}kph`;  
+    windText.textContent = `Wind Speed: ${newData.wind}kph`;  
     let uvText = document.createElement('p'); 
     uvText.setAttribute('id', 'info--uvText');
     uvText.setAttribute('class', 'text');
-    uvText.textContent = `UV Rating: ${newData.humidity}`;  
+    uvText.textContent = `UV Rating: ${newData.uv}`;  
 
     infoContainer.append(feelslikeText, humidityText, windText, uvText); 
 
