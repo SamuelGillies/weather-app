@@ -1,45 +1,31 @@
 import './style.css'; 
-// import img from './img/'
+
+let form = document.getElementById('form');
+let search = document.getElementById('form--search');
 
 function generateDOM(newData) {
     const element = document.getElementById('container'); 
-
-    //Search form DOM generation
-
-    let formContainer = document.createElement('div'); 
-    formContainer.setAttribute('id', 'form--container');
-    let form = document.createElement('form'); 
-    form.setAttribute('id', 'form');
-    let search = document.createElement('input');
-    search.setAttribute('id', 'form--search');
-    search.setAttribute('type', 'text');
-    let submit = document.createElement('input');
-    submit.setAttribute('id', 'form--submit');
-    submit.setAttribute('type', 'submit');
-    submit.setAttribute('value', 'submit');
-
-    form.append(search, submit); 
-    formContainer.append(form); 
+    element.innerHTML = ''; 
 
     //Weather data DOM generation
 
     let weatherContainer = document.createElement('div'); 
     weatherContainer.setAttribute('id', 'weather--container');
     
-    let locationContainer = document.createElement('div'); 
-    locationContainer.setAttribute('id', 'location--container');
+    let placeContainer = document.createElement('div'); 
+    placeContainer.setAttribute('id', 'place--container');
     let nameText = document.createElement('p'); 
-    nameText.setAttribute('id', 'location--nameText');
+    nameText.setAttribute('id', 'place--nameText');
     nameText.setAttribute('class', 'text');
     nameText.textContent = `${newData.name}, ${newData.region}`; 
     let descText = document.createElement('p'); 
-    descText.setAttribute('id', 'location--descText');
+    descText.setAttribute('id', 'place--descText');
     descText.setAttribute('class', 'text');
     descText.textContent = newData.description; 
     let image = new Image(); 
     image.src = newData.icon; 
 
-    locationContainer.append(nameText, descText, image); 
+    placeContainer.append(nameText, descText, image); 
 
     let tempContainer = document.createElement('div'); 
     tempContainer.setAttribute('id', 'temperature--container');
@@ -71,18 +57,15 @@ function generateDOM(newData) {
 
     infoContainer.append(feelslikeText, humidityText, windText, uvText); 
 
-    weatherContainer.append(locationContainer, tempContainer, infoContainer);
-    element.append(formContainer, weatherContainer); 
-
+    weatherContainer.append(placeContainer, tempContainer, infoContainer);
+    element.append(weatherContainer); 
 }
 
-async function getWeather(location) {
+async function getWeather(place) {
     const key = '6e6c524233e149aa8be130049230604';
-    let responseData = await fetch(`https://api.weatherapi.com/v1/current.json?key=${key}&q=${location}`, {mode: 'cors'}); 
+    let responseData = await fetch(`https://api.weatherapi.com/v1/current.json?key=${key}&q=${place}`, {mode: 'cors'}); 
     let weatherData = await responseData.json(); 
-    console.log(weatherData); 
     let newData = processData(weatherData);
-    console.log(newData); 
     generateDOM(newData); 
 }
 
@@ -116,13 +99,13 @@ function timeOfDay(time) {
     }
 }; 
 
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let place = search.value; 
+    getWeather(place); 
+    search.value = ''; 
+});
+
 (function init() {
     getWeather('london'); 
 })(); 
-
-// form.addEventListener('submit', (e) => {
-//     e.preventDefault();
-//     const search = document.getElementById('form--search');
-//     location = String(search.value); 
-//     getWeather(location); 
-// });
