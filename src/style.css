@@ -60,7 +60,6 @@ body {
     align-items: center;
     justify-content: center;
     height: 60vh; 
-
 }
 
 #weather--container, #errorContainer {
@@ -68,21 +67,25 @@ body {
     background-color: var(--panel-bg); 
     padding: 1rem;
     border-radius: 16px;
-
 }
+
+
+
+/* Error message display */
 
 #errorContainer {
     display: flex;
     flex-direction: column;
-    justify-content: center; 
-    height: 60vh; 
-   
+    align-items: center;
+    justify-content: center;
+    height: 40vh; 
+    gap: 20px; 
 }
 
 #errorIcon {
+    filter: invert(1);
+    height: 10vh; 
 }
-
-
 
 /* Screen adjustment */
 
