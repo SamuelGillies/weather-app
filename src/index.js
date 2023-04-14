@@ -107,6 +107,9 @@ function errorDOM(errorText) {
     
     errorContainer.append(errorImage, errorMsg); 
     element.append(errorContainer); 
+
+    body.style.backgroundImage = "url('https://source.unsplash.com/9a58YsGiTPk')"; 
+    body.style.color = 'white'; 
 }
 
 async function getWeather(place) {
