@@ -16,6 +16,9 @@ function generateDOM(newData) {
     
     let placeContainer = document.createElement('div'); 
     placeContainer.setAttribute('id', 'place--container');
+    let placeTextContainer = document.createElement('div'); 
+    placeTextContainer.setAttribute('id', 'place--textContainer');
+
     let nameText = document.createElement('p'); 
     nameText.setAttribute('id', 'place--nameText');
     nameText.setAttribute('class', 'text');
@@ -24,17 +27,19 @@ function generateDOM(newData) {
     descText.setAttribute('id', 'place--descText');
     descText.setAttribute('class', 'text');
     descText.textContent = newData.description; 
-    let image = new Image(); 
-    image.src = newData.icon; 
 
-    placeContainer.append(nameText, descText, image); 
+    placeTextContainer.append(nameText, descText); 
+    placeContainer.append(placeTextContainer); 
+
+    let TempInfoContainer = document.createElement('div'); 
+    TempInfoContainer.setAttribute('id', 'temp-info--container');
 
     let tempContainer = document.createElement('div'); 
     tempContainer.setAttribute('id', 'temperature--container');
     let tempText = document.createElement('p'); 
     tempText.setAttribute('id', 'temperature--text');
     tempText.setAttribute('class', 'text');
-    tempText.textContent = `${newData.temp}˚C`; 
+    tempText.textContent = `${newData.temp}˚`; 
 
     tempContainer.append(tempText); 
 
@@ -56,6 +61,11 @@ function generateDOM(newData) {
     uvText.setAttribute('id', 'info--uvText');
     uvText.setAttribute('class', 'text');
     uvText.textContent = `UV Rating: ${newData.uv}`;  
+    let image = new Image(); 
+    image.setAttribute('id', 'weatherIcon');
+    image.src = newData.icon; 
+
+    infoContainer.append(image, feelslikeText, humidityText, windText, uvText); 
 
     let uvAdviceContainer = document.createElement('div'); 
     uvAdviceContainer.setAttribute('id', 'uvAdvice--container');
@@ -70,10 +80,10 @@ function generateDOM(newData) {
 
     uvAdviceContainer.append(uvContent1, uvContent2); 
 
-    infoContainer.append(feelslikeText, humidityText, windText, uvText); 
+    TempInfoContainer.append(tempContainer, infoContainer); 
 
-    weatherContainer.append(placeContainer, tempContainer, infoContainer, uvAdviceContainer);
-    element.append(weatherContainer); 
+    weatherContainer.append(placeContainer, TempInfoContainer);
+    element.append(weatherContainer, uvAdviceContainer); 
 
     if (newData.time === 'morning') {
         body.style.backgroundImage = "url('https://source.unsplash.com/sYffw0LNr7s')"; 

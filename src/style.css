@@ -1,10 +1,6 @@
 :root {
-    --primary-dark: #333;
-    --secondary-dark: #444;
-    --primary-light: #eee;
-    --secondary-light: #ddd;
-    --selected: rgb(192, 192, 192); 
-    --panel-bg: #dddddd25; 
+    --panel-bg: rgba(180, 180, 180, 0.4); 
+    --see-through: rgba(180, 180, 180, 0)
 }
 
 @font-face {
@@ -48,8 +44,8 @@ body {
 
 #form--search {
     height: 2rem; 
-    border: 0pt solid black;
-    background-color: #9d9d9d00;
+    border: 0pt solid var(--panel-bg);
+    background-color: var(--see-through); 
     color: white; 
 }
 
@@ -57,19 +53,77 @@ body {
 
 #container {
     display: flex; 
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 60vh; 
+    justify-items: center;
+    gap: 20px; 
+    margin-top: 8rem;
 }
 
-#weather--container, #errorContainer {
-    width: 40rem; 
+#weather--container, #errorContainer, #uvAdvice--container {
+    width: 30rem; 
     background-color: var(--panel-bg); 
     padding: 1rem;
     border-radius: 16px;
 }
 
+/* Place container */
 
+#place--container {
+    display: flex; 
+    justify-content: space-between;
+    margin-bottom: 20px; 
+}
+
+#place--nameText {
+    font-size: 1.5;
+}
+
+#place--descText {
+    font-size: 2rem;
+}
+
+/* Temp / Info container */
+
+#temp-info--container {
+    display: flex; 
+    justify-content: space-between;
+}
+
+#temperature--container {
+    display: flex; 
+    justify-content: space-between;
+    width: 50%; 
+}
+
+#temperature--text {
+    font-size: 9rem;
+}
+
+#info--container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px; 
+}
+
+/* UV Advice container */
+
+#uvAdvice--container {
+    display: flex; 
+    flex-direction: column;
+    gap: 10px; 
+}
+
+#info--uvAdvice1 {
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+#info--uvAdvice2 {
+    text-align: justify;
+    font-size: 0.8rem;
+}
 
 /* Error message display */
 
